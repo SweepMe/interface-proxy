@@ -1,0 +1,129 @@
+[project]
+name = "interface-proxy"
+description = "A library that allows to import a module in one process (server) and use that module in another process (client)."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE.txt" }
+maintainers = [
+    { name = "SweepMe! GmbH", email = "contact@sweep-me.net" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dynamic = ["version"]
+dependencies = [
+    "tblib ~= 3.0.0",
+    "pywin32 == 306",
+    "six ~= 1.16.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "tox ~= 4.12.1",
+    "ruff ~= 0.2.1",
+    "black ~= 24.1.1",
+    "mypy ~= 1.8.0",
+    "pytest ~= 8.0.0"
+]
+typed = [
+    "types-psutil ~= 5.9.3",
+    "types-pyserial ~=3.5",
+]
+
+[project.urls]
+Repository = "https://github.com/SweepMe/interface-proxy"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "interface_proxy.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+src = ["src"]
+select = [
+    "F",
+    "E", "W",
+    "C90",
+    "I",
+    "N",
+    "D",
+    "UP",
+    "YTT",
+    "ANN",
+    "ASYNC",
+    "S",
+    "BLE",
+    "B",
+    "A",
+    "COM",
+    "C4",
+    "DTZ",
+    "T10",
+    "EM",
+    "FA",
+    "ISC",
+    "ICN",
+    "G",
+    "INP",
+    "PIE",
+    "T20",
+    "PT",
+    "Q",
+    "RSE",
+    "RET",
+    "SLF",
+    "SIM",
+    "TID",
+    "INT",
+    "ARG",
+    "PTH",
+    "TD",
+    "ERA",
+    "PD",
+    "PL",
+    "TRY",
+    "FLY",
+    "NPY",
+    "RUF",
+]
+ignore = [
+    "ANN101", "ANN102",
+    "D203", "D213", "D406", "D407",
+    "G004",  # logging does not have any built-in keyword string interpolation for the message itself, falling back to %s etc. is crap
+    "UP015",  # open mode should be clearly stated, explicit is better than implicit
+]
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[tool.ruff.flake8-annotations]
+allow-star-arg-any = true
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["S101", "SLF001", "INP001", "PLR2004"]  # Tests should use assert, are allowed to test private internals, aren't a package, must use numbers in comparisons
+".github/*" = ["INP001"]
+
+[tool.black]
+line-length = 120
+
+[tool.mypy]
+strict = true
+mypy_path = "src"
+exclude = [
+    '^build/'
+]
+follow_imports = "silent"
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
