@@ -1,5 +1,9 @@
+"""Dummy library with class and functions used by the test server."""
+
+
 class ComplicatedObject:
     """A simple class."""
+
     var = 0
 
     def set(self, v: int) -> None:
