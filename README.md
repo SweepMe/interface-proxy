@@ -15,7 +15,7 @@ A library that allows to import a module in one process (server) and use that mo
 
 ## Communication Protocols
 - Via named pipes (client and server on the same machine).
-- Via TCP connection
+- Via TCP connection.
 
 ## Examples
 You can check the integration tests in the source code to find out how to use this library.
