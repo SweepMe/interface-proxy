@@ -47,6 +47,9 @@ version = {attr = "interface_proxy.__version__"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+interface_proxy = ["py.typed"]
+
 [tool.ruff]
 line-length = 120
 target-version = "py39"
