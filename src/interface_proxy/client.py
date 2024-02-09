@@ -110,7 +110,7 @@ class RunServer:
         if server_py:
             self._server_py = server_py
 
-        if not self._process or self._process.poll() is not None:
+        if not self._references or not self._process or self._process.poll() is not None:
             # process was never started or it crashed
             self.run_server()
 
@@ -192,8 +192,19 @@ class RunServer:
                 logger.info("Terminating server")
                 self._references = set()
                 self._process.terminate()
+                self.wait_until_process_stopped(self._process)
             except Exception:
                 logger.exception("Failed to terminate running server process. You may need to restart your PC.")
+
+    def wait_until_process_stopped(self, process: subprocess.Popen[bytes]) -> None:
+        """Wait until the terminated process has actually stopped."""
+        for _ in range(500):
+            if process.poll() is not None:
+                break
+            time.sleep(0.01)
+        else:
+            msg = "Server process did not terminate within the timeout."
+            raise OSError(msg)
 
     def run_server(self) -> None:
         """Start the server."""
@@ -437,7 +448,9 @@ class PipeProxy(Proxy):
                 return win32pipe.CallNamedPipe(self.pipe_name, command + b"\n", 2**16, 5000)  # type: ignore
 
             except pywintypes.error as e:
-                if e.winerror != winerror.ERROR_FILE_NOT_FOUND:
+                # server process might be starting up currently or the previous one was shutdown recently and
+                # the new one still has to be started
+                if e.winerror not in [winerror.ERROR_FILE_NOT_FOUND, winerror.ERROR_BROKEN_PIPE]:
                     raise
                 if delay > self.MAX_TIMEOUT:
                     raise
