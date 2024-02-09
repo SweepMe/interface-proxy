@@ -16,7 +16,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-    "tblib ~= 3.0.0",
+    "tblib ~= 2.0.0",
     "pywin32 == 306",
     "six ~= 1.16.0"
 ]
