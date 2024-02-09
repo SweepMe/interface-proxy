@@ -64,7 +64,7 @@ jobs:
         {
           Throw "Inspected version $LibVersion could not be found in any wheels in the dist folder."
         }
-        $TagName = "Release-${$LibVersion}_(${{ inputs.targetenv || 'testpypi' }})"
+        $TagName = "Release-${LibVersion}_(${{ inputs.targetenv || 'testpypi' }})"
         git tag $TagName
         git push origin $TagName
       shell: pwsh
